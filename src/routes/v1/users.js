@@ -4,6 +4,12 @@ const mysql = require('mysql2/promise');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
+const kevin = require('@kevin.eu/kevin-platform-client');
+
+const clientId = 'b28fb8ff-52c6-4d3f-8f3d-9bef3ed1a56b';
+const clientSecret = 'f82bfb3f61ab2d66';
+
+const client = new kevin.Client(clientId, clientSecret);
 
 const { mysqlConfig, jwtSecret, mailServer, mailServerPassword } = require('../../config');
 const validation = require('../../middleware/validation');
@@ -92,6 +98,32 @@ router.get('/account-payment', isLoggedIn, async (req, res) => {
       `SELECT * FROM bbasketball_transactions LEFT JOIN bbasketball_users2 ON bbasketball_transactions.user_id = bbasketball_users2.id WHERE user_id = ${req.user.accountId}`,
     );
     await con.end();
+
+    // if (data[0].status !== 'success') {
+    //   const options = {
+    //     headers: {
+    //       'Redirect-URL': 'https://redirect.kevin.eu/payment.html',
+    //     },
+    //     query: {
+    //       redirectPreferred: true,
+    //     },
+    //     body: {
+    //       amount: '1.23',
+    //       currencyCode: 'EUR',
+    //       description: 'Lorem Ipsum',
+    //       bankPaymentMethod: {
+    //         creditorName: 'John Doe',
+    //         endToEndId: '123',
+    //         creditorAccount: {
+    //           iban: 'LT000000000000000000',
+    //         },
+    //       },
+    //     },
+    //   };
+    //   const payment = await client.payment.initiatePayment(options);
+    //   // const newData = data.reduce((r, c) => Object.assign(r, c), {});
+    //   // return res.send([newData]);
+    //   return res.send([payment]);
 
     if (data[0].status !== 'success') {
       const JWTPayload = jsonwebtoken.sign(

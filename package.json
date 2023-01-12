@@ -5,6 +5,7 @@
     "dev": "nodemon src/app.js"
   },
   "dependencies": {
+    "@kevin.eu/kevin-platform-client": "^2.1.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
